@@ -69,5 +69,12 @@ Install package ID 002.
 
 Simply delete the Batch file and the folder named 'MicroflashOS'
 
+---
 
+## Roadmap:
+
+- More packages (maybe some games)
+- MicroflashOS Updater
+- More jailbreak-y stuff (I have some handwritten lore pages that need to be released for that though)
+- Bug fixes (never gets old!), mostly just looking for any weird situations
 
