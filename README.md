@@ -102,13 +102,13 @@ MicroflashOS utilises some file formats for system files:
 The system disk consists of two "partitions": ```system``` and ```userdata```
 - ```system``` contains the operating system itself.
 - ```users``` contains, well, user data.
-  Inside each user folder (set by the Batch variable %username%) is a folder named ```mfosdata``` that contains user-specific packages and toggles.
+  Inside each user folder (set by the Batch variable ```%username%```) is a folder named ```mfosdata``` that contains user-specific packages and toggles.
   If ```mfosdata``` is ever corrupted it will simply be regenerated on next boot.
 
 Upon reinstalling MicroflashOS, only the ```system``` folder is modified.
 Any leftover user data in ```users``` is left intact. *This may cause some problems when updating.*
 
-If you wish to fully format the system it's advised you run ```homewipe``` after installation.
+If you wish to fully format the system you must run ```homewipe``` after installation.
 
 ---
 
