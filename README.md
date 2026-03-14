@@ -97,7 +97,7 @@ MicroflashOS utilises some file formats for system files:
 
 The system disk consists of two "partitions": ```system``` and ```userdata```
 - ```system``` contains the operating system itself.
-- ```users``` contains, well, user data.
+- ```userdata``` contains, well, user data.
   Inside each user folder (set by the Batch variable ```%username%```) is a folder named ```mfosdata``` that contains user-specific packages and toggles.
   If ```mfosdata``` is ever corrupted it will simply be regenerated on next boot.
 
