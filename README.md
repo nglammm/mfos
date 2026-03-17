@@ -128,7 +128,7 @@ Some noteworthy ones:
 - More packages (maybe some games)
 - MicroflashOS Updater
 - Logging system for debugging
-- ```robolibs``` (the current unreleased one is a mess)
+- ```robolibs``` (added database manager, still some more lore-specific stuff to add)
 - More repositories (maybe have a distinction between official packages from Kenneth and GigaflashOS CFW packages?)
 - More jailbreak-y stuff (I have some handwritten lore pages that need to be released for that though)
 - Bug fixes (never gets old!), mostly just looking for any weird situations
