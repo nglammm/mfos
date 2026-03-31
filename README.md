@@ -101,7 +101,7 @@ Simply delete the Batch file and the folder named ```MicroflashOS```
 
 MicroflashOS utilises some proprietary file formats:
 - ```.mcm```: MicroflashOS Core Module, reserved for critical system modules (sysmodules) that are required for MicroflashOS. **It is recommended you do not modify these.**
-- ```.mfm```: MicroflashOS Module, these are non-critical sysmodules that don't affect the system *much* but still be careful.
+- ```.mfm```: MicroflashOS Module, these are non-critical sysmodules that don't affect the system *much* but still be careful with them.
 - ```.mfp```: MicroflashOS Package, used by packages installed from ```mfpkg```
 
 ---
@@ -142,7 +142,7 @@ Log messages follow this format:
 
 ```[a] b: c```
 
-where ```a``` is the running process, ```b``` is the message type (either ```INFO```, ```WARN```, ```DEBUG``` or ```ERROR```)
+where ```a``` is the running process, ```b``` is the message type (either ```INFO```, ```WARN```, ```DEBUG``` or ```ERROR```) and ```c``` is the log message.
 
 ---
 
