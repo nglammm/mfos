@@ -26,7 +26,7 @@ Sometimes it may crash on Windows 10 when typing a command. I don't know why.
 Download the latest release and run the Batch file.
 
 On install, the Batch file creates a "system disk" named ```MicroflashOS``` in the same location as the Batch file.
-All operating system data is stored inside that folder.
+All operating system data is stored inside that folder. MicroflashOS does NOT attempt to modify your computer further.
 
 After it is "installed" just run the Batch file every "startup".
 
@@ -38,6 +38,11 @@ Download the latest release and run the Batch file.
 
 Then simply run ```recovery``` to boot to recovery mode to reinstall.
 
+Upon updating MicroflashOS, only the ```mfos``` folder is modified. 
+Any leftover user data in ```userdata``` is left intact. 
+However, this depends on the latest version and how major it is, which will be specified in the release notes.
+If a release does break something from the older version, it will be made clear in the release notes.
+
 ---
 
 ## Quick Start Guide
@@ -47,6 +52,7 @@ In MicroflashOS, you can type ```help``` to get a list of all available commands
 Here are some useful commands to start with:
 
 - ```about```: Shows some system info
+- ```clock```: Shows date and time
 - ```mkdir```: Create directory
 - ```mkfile```: Create a file
 - ```del```: Delete file/directory
@@ -64,7 +70,7 @@ It handles standalone packages in the ```.mfp``` format, otherwise it acts as a 
   The included repository as of the latest stable release is the *GigaflashOS Unified Repository [Revision 1]*
 - List installed packages: ```mfpkg-list```
 - Install/uninstall package: ```mfpkg-install``` or ```mfpkg-uninstall``` respectively.
-- QUICKLY install/uninstall a package: ```mfpkg-dl-[package ID]``` or ```mfpkg-rm-[package ID]``` respectively.
+- QUICKLY install/uninstall package: ```mfpkg-dl-[package ID]``` or ```mfpkg-rm-[package ID]``` respectively.
 
 ---
 
@@ -89,7 +95,14 @@ Install package ID ```002```.
 
 ## Uninstallation
 
-Simply delete the Batch file and the folder named ```MicroflashOS```
+Simply delete the MicroflashOS Batch file and the folder named ```MicroflashOS```
+
+---
+
+## Reset to "stock" (remove ALL user settings)
+
+Run ```homewipe```. A new userdata partition will be generated on next boot.
+Please be careful with this command to avoid data loss!
 
 ---
 
@@ -100,6 +113,7 @@ Simply delete the Batch file and the folder named ```MicroflashOS```
 ## File formats
 
 MicroflashOS utilises some proprietary file formats:
+
 - ```.mcm```: MicroflashOS Core Module, reserved for critical system modules (sysmodules) that are required for MicroflashOS. **It is recommended you do not modify these.**
 - ```.mfm```: MicroflashOS Module, these are non-critical sysmodules that don't affect the system *much* but still be careful with them.
 - ```.mfp```: MicroflashOS Package, used by packages installed from ```mfpkg```
@@ -109,16 +123,11 @@ MicroflashOS utilises some proprietary file formats:
 ## Directories
 
 The system disk consists of two "partitions": ```mfos``` and ```userdata```
+
 - ```mfos``` contains the operating system itself. Sysmodules are stored here.
 - ```userdata``` contains, well, user data.
   Inside each user directory (set by the Batch variable ```%username%```) is a directory named ```mfosdata``` that contains user-specific packages and toggles.
   If ```mfosdata``` is ever corrupted it will simply be regenerated on next boot.
-
-Upon reinstalling/updating MicroflashOS, only the ```mfos``` folder is modified. 
-Any leftover user data in ```userdata``` is left intact. It depends on the version and how major it is, which will be specified in the release notes.
-If a release does break something from the older version, it will be made clear in the release notes.
-
-If you wish to clear userdata, run ```homewipe``` after installation.
 
 ---
 
@@ -128,6 +137,7 @@ Toggles are configurations that can be configured.
 Note that accessing and/or modifying these requires DevTools.
 
 Some noteworthy ones:
+
 - ```slowboot```: Add pauses during boot sequence, allowing the user to see the boot process in greater detail as it automatically clears itself once the shell has been initialized.
 - ```showdir```: Show the current directory above the prompt. Useful for navigating complex directory trees.
 
