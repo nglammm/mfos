@@ -40,7 +40,7 @@ Then simply run ```recovery``` to reboot to recovery mode to reinstall.
 
 Upon updating MicroflashOS, only the ```mfos``` folder is modified. 
 Any leftover user data in ```userdata``` is left intact. 
-However, this depends on the latest version and whether or not it will affect the userdata partition.
+However, this depends on what changes are introduced in the latest version and whether or not it will affect the userdata partition.
 If a release does break something, it will be made clear in the release notes.
 
 Note that if a release makes changes to the system partition, a missing/modified file is often enough to automatically reboot to recovery.
@@ -59,7 +59,7 @@ Here are some useful commands to start with:
 - ```mkfile```: Create a file
 - ```del```: Delete file/directory
 - ```cd```: Change directory
-- ```list```: List accessible files and directories from current location (similar to Linux ```ls``` or Windows ```dir```)
+- ```list```: List accessible files and directories *from current location* (similar to Linux ```ls``` or Windows ```dir```)
 
 ---
 
