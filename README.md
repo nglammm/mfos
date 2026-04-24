@@ -14,7 +14,7 @@ Code is licensed under the GPL-3.0 license, you are free to make your own deriva
 
 I normally test under Wine (Arch Linux)
 
-Sometimes it may crash on Windows 10 when typing a command. I don't know why.
+Sometimes it may crash on Windows 10 when typing a command. *I don't know why.*
 
 ---
 
@@ -42,7 +42,7 @@ Any leftover user data in ```userdata``` is left intact.
 However, this depends on what changes are introduced in the latest version and whether or not they will affect the ```userdata``` partition.
 If a release does break something, it will be made clear in the release notes.
 
-Note that if a release makes changes to the ```mfos``` partition, a missing/modified file is often enough to automatically reboot to recovery.
+Note that if a release makes changes to the ```mfos``` folder, a missing file is often enough to automatically reboot to recovery.
 
 ---
 
@@ -55,10 +55,17 @@ Here are some useful commands to start with:
 - ```about```: Shows some system info
 - ```clock```: Shows date and time
 - ```mkdir```: Create directory
-- ```mkfile```: Create a file
+- ```mkfile```: Create a file (disabled as of 2026.04.25)
 - ```del```: Delete file/directory
 - ```cd```: Change directory
 - ```list```: List accessible files and directories *from current location* (similar to Linux ```ls``` or Windows ```dir``` commands)
+
+---
+
+## Command History
+
+As of 2026.04.25, MicroflashOS now logs commands. 
+The history file can be found in the home directory as ```mfos-history.txt```
 
 ---
 
@@ -140,7 +147,9 @@ Some noteworthy ones:
 
 - ```slowboot```: Add pauses during boot sequence, allowing the user to see the boot process in greater detail. Normally the (verbose) boot process is cleared from the screen once the shell has been initialized, but ```slowboot``` disables this behavior.
 - ```showdir```: Show the current directory above the prompt. Useful for navigating complex directory trees.
-- ```nolog``` Disables the log file (more info in the next section)
+- ```nolog```: Disables the log file (more info in the next section)
+- ```incognito```: Disables logging command history
+- ```allowdisabled```: Enables some disabled commands
 
 
 ---
@@ -167,7 +176,6 @@ where ```a``` is the running process, ```b``` is the message type (either ```INF
 - Bug fixes (never gets old!), mostly just looking for any weird situations
 - Future-proofing (making things more universal and easier to customize)
 - Guide to Programming For MicroflashOS
-- Command history
 - Compact and shrink code
 - Recycle Bin
 - Move toggles to variable-based settings
