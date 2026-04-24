@@ -75,7 +75,7 @@ This behavior can be disabled with the ```incognito``` toggle. Read about toggle
 ## MicroflashOS Package Manager
 
 MicroflashOS includes a "package manager" called ```mfpkg```. 
-It handles standalone packages in the ```.mfp``` format, otherwise it acts as a bootstrap for installers (such as the one used to install DevTools)
+It handles standalone packages in the ```.mfp``` format, otherwise it acts as a bootstrap for installers (such as the one used to install [DevTools](https://github.com/knbn1/mfos#devtools-developer-tools))
 
 - List available packages in repository: ```mfpkg-repo-available```.
   The included repository as of the latest stable release is the *GigaflashOS Unified Repository [Revision 1]*
@@ -112,7 +112,8 @@ Simply delete the MicroflashOS Batch file and the folder named ```MicroflashOS``
 
 ## Resetting to Defaults
 
-Run ```homewipe``` after booting to remove ALL user settings. A new ```userdata``` partition will be formatted after rebooting.
+Run ```homewipe``` after booting to remove ALL user content and settings. A new ```userdata``` partition will be formatted after rebooting.
+
 Please be careful with this command to avoid unintentional data loss!
 
 ---
@@ -136,7 +137,7 @@ The system disk contains two "partitions": ```mfos``` and ```userdata```
 
 - ```mfos``` contains the operating system itself. Sysmodules are stored here.
 - ```userdata``` contains, well, user data.
-  Inside each user directory (set by the Batch variable ```%username%```) is a directory named ```mfosdata``` that contains user-specific packages and toggles.
+  Inside each user directory (set by the generic Batch variable ```%username%```) is a directory named ```mfosdata``` that contains user-specific packages and toggles.
   If ```mfosdata``` is ever corrupted it will simply be regenerated on next boot. Note that some settings and packages may be missing.
 
 ---
@@ -144,7 +145,7 @@ The system disk contains two "partitions": ```mfos``` and ```userdata```
 ## Toggles
 
 Toggles are configurations that can be configured (of course).
-Note that accessing and/or modifying these requires DevTools.
+Note that accessing and/or modifying these requires [DevTools](https://github.com/knbn1/mfos#devtools-developer-tools).
 
 Some noteworthy ones:
 
