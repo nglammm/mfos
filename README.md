@@ -65,7 +65,10 @@ Here are some useful commands to start with:
 ## Command History
 
 As of 2026.04.25, MicroflashOS now logs commands. 
+
 The history file can be found in the home directory as ```mfos-history.txt```
+
+This behavior can be disabled with the ```incognito``` toggle. Read about toggles and DevTools [here](https://github.com/knbn1/mfos#toggles) and [here](https://github.com/knbn1/mfos#devtools-developer-tools).
 
 ---
 
