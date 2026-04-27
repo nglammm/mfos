@@ -33,9 +33,8 @@ After it is "installed" just run the Batch file every "startup". MicroflashOS sh
 
 ## Updating MicroflashOS
 
-In most cases, simply download the latest release's Batch file and run it.
-
-Then simply run ```recovery``` to reboot to recovery mode to update.
+As of 2026.04.28, MicroflashOS updates are handled automatically on boot.
+If you are on an older version, you may update manually by using the ```recovery``` command.
 
 Upon updating MicroflashOS, only the ```mfos``` folder is modified. 
 Any leftover user data in ```userdata``` is left intact. 
@@ -106,7 +105,7 @@ Install package ID ```002```.
 
 ## Uninstalling MicroflashOS 
 
-Simply delete the MicroflashOS Batch file and the folder named ```MicroflashOS```
+Simply delete the MicroflashOS Batch file, log file (if present) and the folder named ```MicroflashOS```
 
 ---
 
@@ -154,6 +153,7 @@ Some noteworthy ones:
 - ```nolog```: Disables the log file (more info in the next section)
 - ```incognito```: Disables logging command history
 - ```allowdisabled```: Enables some disabled commands
+- ```novercheck```: Disable version check on boot (as of 2026.04.28)
 
 
 ---
@@ -173,7 +173,6 @@ where ```a``` is the running process, ```b``` is the message type (either ```INF
 ## Roadmap:
 
 - More packages (maybe some games)
-- MicroflashOS Updater
 - ```robolibs``` (added database manager in ```2026.03.18-rbtest```, still some more lore-specific stuff to add)
 - More repositories (maybe have a distinction between official packages from Kenneth and GigaflashOS CFW packages?)
 - More jailbreak-y stuff (I have some handwritten lore pages that need to be released for that though)
