@@ -183,4 +183,5 @@ where ```a``` is the running process, ```b``` is the message type (either ```INF
 - Compact and shrink code
 - Recycle Bin
 - Move toggles to variable-based settings
+- Add limitations to prompt to prevent out of bounds access to some functions 
 
