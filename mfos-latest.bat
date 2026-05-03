@@ -6,14 +6,14 @@
 
 :: Define some version strings
 
-set "mfosver=2026.05.03"
+set "mfosver=2026.05.04"
 set "fbver=5.2"
 set "pkgrepo=GigaflashOS Unified Repository [Revision 2]"
 
 :: Define default directories
 
 set "sysdir=mfos"
-set "modsdir=usrmods"
+set "modsdir=usermods"
 set "userdata=userdata"
 set "usrsysdata=mfosdata"
 set "disk0label=MicroflashOS"
@@ -277,7 +277,7 @@ echo.
 :: Load user modules
 
 for %%U in (flashbreak devtools) do (
-    if exist "%usrmods%/%%U.mfm" (call :loadmodok /%userdata%/%username%/%usrsysdata%/modules/%%U.mfm)
+    if exist "%usrmods%/%%U.mfm" (call :loadmodok /%userdata%/%username%/%usrsysdata%/%modsdir%/%%U.mfm)
 )
 
 if exist "%toggles%/slowboot" (call :slowboot)
@@ -455,10 +455,10 @@ if exist "%disk0p1%/fsutils.mcm" (
     echo File management:
     echo.
     echo mkdir [directory]: Create a directory
-    echo rename [target] [new name] Rename something to other thing
-    echo delete [file/directory] [thing]: Delete a file/directory
+    echo rename [target] [new name] Rename something to another thing
+    echo delete [file/directory] [name]: Delete a file/directory
     echo list: List available files/directories
-    echo cd [dir or path]: Change to a directory
+    echo cd [path]: Change to a directory
     echo home: Quickly return to user directory
     echo homewipe: Wipe all user directories
     echo [help] INFO: load help section for /%sysdir%/fsutils.mcm >>"%logfile%"
@@ -467,12 +467,11 @@ if exist "%usrmods%/devtools.mfm" (
     echo.
     echo Developer commands:
     echo.
-    echo devtools-uninstall: DevTools uninstaller
     echo mountsys: Mount and modify system disk contents
-    echo modules: List all system and user modules
+    echo modules: List all core and user modules
     echo toggles [create/delete/enabled/list] [toggle]: Manage toggles
     echo getargs [arguments]: Sanity check to analyse arguments passed
-    echo getvars: Get ALL environment variables
+    echo getvars: Print a list of ALL environment variables accessible
     echo [help] INFO: load help section for /%sysdir%/%modsdir%/devtools.mfm >>"%logfile%"
 )
 if exist "%disk0p1%/mfpkg.mcm" (
@@ -497,7 +496,7 @@ if exist "%disk0p1%/mfpkg.mcm" (
         echo [mfpkg] INFO: found package /%userdata%/%username%/%usrsysdata%/packages/winflash.mfp >>"%logfile%"
     )
     if exist "%pkgdir%/mountvirt.mfp" (
-        echo mountvirt [disk]: Mount and boot to a system disk of your choice
+        echo mountvirt [disk name]: Mount and boot to a system disk of your choice
         echo [mfpkg] INFO: found package /%userdata%/%username%/%usrsysdata%/packages/mountvirt.mfp >>"%logfile%"
     )
 )
@@ -555,8 +554,6 @@ goto execdone
 :: Power options
 
 :reboot
-if not exist "%disk0p1%/core.mcm" (call :nocommand)
-call :cmdok
 if "%1" == "recovery" (
     echo Rebooting to recovery mode...
     echo [kernel] INFO: rebooting to recovery >>"%logfile%"
@@ -566,7 +563,6 @@ set "enforcereboot=true"
 goto :eof
 
 :shutdown
-if not exist "%disk0p1%/core.mcm" (goto nocommand)
 call :cmdok
 title Shutting down...
 echo Shutting down...
@@ -580,7 +576,11 @@ if not exist "%disk0p1%/fsutils.mcm" (goto nocommand)
 call :cmdok
 title File Manager
 if "%1"=="" (
-    echo Make what?
+    echo This command is used to make a directory.
+    echo.
+    echo Usage:
+    echo.
+    echo mkdir [directory]
     echo [fsutils] ERROR: no directory provided >>"%logfile%"
     goto execdone
 )
@@ -604,7 +604,11 @@ if not exist "%disk0p1%/fsutils.mcm" (goto nocommand)
 call :cmdok
 title File Manager
 if "%1"=="" (
-    echo [target] [new name]
+    echo This command renames a file or a folder.
+    echo.
+    echo Usage:
+    echo.
+    echo rename [target] [new name]
     echo [fsutils] ERROR: no option selected >>"%logfile%"
     goto execdone
 )
@@ -633,7 +637,11 @@ if not exist "%disk0p1%/fsutils.mcm" (goto nocommand)
 call :cmdok
 title File Manager
 if "%1"=="" (
-    echo [file/directory]
+    echo This command deletes something.
+    echo.
+    echo Usage:
+    echo.
+    echo delete [file/directory] [name]
     echo [fsutils] ERROR: no option selected >>"%logfile%"
     goto execdone
 )
@@ -692,7 +700,11 @@ if not exist "%disk0p1%/fsutils.mcm" (goto nocommand)
 call :cmdok
 title File Manager
 if "%1"=="" (
-    echo Change to where?
+    echo This command is used to enter a directory or change your current directory.
+    echo.
+    echo Usage:
+    echo.
+    echo cd [path]
     echo [fsutils] ERROR: no path provided >>"%logfile%"
     goto execdone
 )
@@ -798,7 +810,11 @@ goto execdone
 if not exist "%usrmods%/devtools.mfm" (goto nocommand)
 call :cmdok
 if "%1"=="" (
-    echo [create/delete/enabled/list]
+    echo Manage your toggles.
+    echo.
+    echo Usage:
+    echo.
+    echo toggles [create/delete/enabled/list] [toggle]
     echo [toggle-manager] ERROR: no option selected >>"%logfile%"
     goto execdone
 )
@@ -961,7 +977,7 @@ echo Installing DevTools...
 echo.
 echo MicroflashOS Developer Tools [%mfosver%]>"%usrmods%/devtools.mfm"
 if not exist "%usrmods%/devtools.mfm" (
-    echo Failed to install DevTools module.
+    echo Failed to install DevTools user module.
     echo [mfpkg] ERROR: failed to install /%sysdir%/%modsdir%/devtools.mfm >>"%logfile%"
     endlocal
     goto execdone
@@ -987,11 +1003,11 @@ if not exist "%usrmods%/devtools.mfm" (goto nodev)
 echo F145HBR34K version: %fbver%
 echo MicroflashOS version: %mfosver%
 echo.
-echo Installing F145HBR34K module...
+echo Installing F145HBR34K...
 echo.
 echo F145HBR34K jailbreak [%mfosver%]>"%usrmods%/flashbreak.mfm"
 if not exist "%usrmods%/flashbreak.mfm" (
-    echo Failed to install F145HBR34K module.
+    echo Failed to install F145HBR34K user module.
     echo [mfpkg] ERROR: failed to install /%sysdir%/%modsdir%/flashbreak.mfm >>"%logfile%"
     goto execdone
 )
@@ -1064,11 +1080,11 @@ echo [devtools] INFO: begin uninstallation >>"%logfile%"
 cd /d "%usrmods%/"
 del devtools.mfm /f
 if exist "%usrmods%/devtools.mfm" (
-    echo Failed to delete DevTools module!
-    echo [devtools] ERROR: could not delete devtools module >>"%logfile%"
+    echo Failed to delete DevTools user module!
+    echo [devtools] ERROR: could not delete devtools user module >>"%logfile%"
     goto execdone
 )
-echo [devtools] INFO: deleted module devtools.mfm >>"%logfile%"
+echo [devtools] INFO: deleted user module devtools.mfm >>"%logfile%"
 cd /d "%pkgmeta%/"
 del 001-DevTools /f
 if exist "%pkgmeta%/001-DevTools" (goto unregfail)
@@ -1094,11 +1110,11 @@ echo.
 cd /d "%usrmods%"
 del flashbreak.mfm /f /q
 if exist "%usrmods%/flashbreak.mfm" (
-    echo Failed to delete F145HBR34K module!
-    echo [flashbreak] ERROR: could not delete flashbreak module >>"%logfile%"
+    echo Failed to delete F145HBR34K user module!
+    echo [flashbreak] ERROR: could not delete flashbreak user module >>"%logfile%"
     goto execdone
 )
-echo [flashbreak] INFO: deleted module flashbreak.mfm >>"%logfile%"
+echo [flashbreak] INFO: deleted user module flashbreak.mfm >>"%logfile%"
 cd /d "%pkgmeta%"
 del 002-F145HBR34K /f /q
 if exist "%pkgmeta%/002-F145HBR34K" (goto unregfail)
@@ -1228,7 +1244,14 @@ if not exist "%usrmods%/devtools.mfm" (goto nodev)
 if "%fbloaded%" NEQ "yessir" (goto nofb)
 title Virtual System Disk Mounter
 if "%1"=="" (
-    echo Please enter a valid system disk name.
+    echo This command is used to mount a "virtual system disk".
+    echo These can be obtained with the dumper, installable via pID 005.
+    echo.
+    echo Usage:
+    echo.
+    echo mountvirt [disk name]
+    echo.
+    echo Note: Virtual system disks must be in the same location as the Batch file!
     goto execdone
 )
 if not exist "%~dp0%1" (
