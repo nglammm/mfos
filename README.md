@@ -8,6 +8,8 @@ Please read [disclaimer.md](https://github.com/knbn1/microflash-os/blob/main/dis
 
 Code is licensed under the GPL-3.0 license, you are free to make your own derivative/fork of MicroflashOS.
 
+Documentation is correct according to the latest version in GitHub Releases.
+
 ---
 
 ## Compatibility Notes
@@ -33,11 +35,9 @@ After it is "installed" just run the Batch file every "startup". MicroflashOS sh
 
 ## Updating MicroflashOS
 
-For versions 2026.05.02 and later, MicroflashOS can be updated automatically with command ```update``` which will update the user to the latest version.
+MicroflashOS updates are handled automatically on boot. Just download the latest Batch file and run it. The program should figure out the rest.
 
-For versions 2026.04.28 or earlier, you would need to manually install MicroflashOS's bat files for update. Updates are handled automatically on boot. Just download the latest Batch file and run it. The program should figure out the rest.
-
-If you are on an older version, you may update manually by using the ```recovery``` command.
+If you are on an older version, you may update manually using the ```recovery``` command.
 
 Upon updating MicroflashOS, only the ```mfos``` folder is modified. 
 Any leftover user data in ```userdata``` is left intact. 
@@ -57,15 +57,13 @@ Here are some useful commands to start with:
 - ```about```: Shows some system info
 - ```clock```: Shows date and time
 - ```mkdir [directory]```: Create directory
-- ```delete [directory]```: Delete file/directory
-- ```cd [directory]```: Change directory
+- ```delete [file/directory] [thing]```: Delete file/directory
+- ```cd [path]```: Change directory
 - ```list```: List accessible files and directories *from current location* (similar to Linux ```ls``` or Windows ```dir``` commands)
 
 ---
 
 ## Command History
-
-As of 2026.04.25, MicroflashOS now logs commands. 
 
 The history file can be found in the home directory as ```mfos-history.txt```
 
@@ -76,10 +74,10 @@ This behavior can be disabled with the ```incognito``` toggle. Read about toggle
 ## MicroflashOS Package Manager
 
 MicroflashOS includes a "package manager" called ```mfpkg```. 
-It handles standalone packages in the ```.mfp``` format, otherwise it acts as a bootstrap for installers (such as the one used to install [DevTools](https://github.com/knbn1/mfos#devtools-developer-tools))
+It handles standalone packages in the ```.mfp``` format as well as user modules in the ```.mfm``` format, otherwise it acts as a bootstrap for installers (such as the one used to install [DevTools](https://github.com/knbn1/mfos#devtools-developer-tools))
 
 - List available packages in repository: ```mfpkg available```
-  The included repository as of the latest stable release is the *GigaflashOS Unified Repository [Revision 1]*
+  The included repository as of the latest stable release is the *GigaflashOS Unified Repository [Revision 2]*
 - List installed packages: ```mfpkg list```
 - Install/uninstall package: ```mfpkg install [package ID]``` or ```mfpkg uninstall [package ID]``` respectively.
 
@@ -126,7 +124,7 @@ Please be careful with this command to avoid unintentional data loss!
 MicroflashOS utilises some proprietary file formats:
 
 - ```.mcm```: MicroflashOS Core Module, reserved for critical system modules (sysmodules) that are required for MicroflashOS. **It is recommended you do not modify files with this extension.**
-- ```.mfm```: MicroflashOS Module, these are non-critical sysmodules that don't affect the core system, however modifying these may break packages using this sysmodule format.
+- ```.mfm```: MicroflashOS Module, these are user-installed modules from ```mfpkg```.
 - ```.mfp```: MicroflashOS Package, used by packages installed from ```mfpkg```. Deleting these will leave the package in a broken/unusable state, which can only be resolved by reinstalling the package.
 
 ---
@@ -135,9 +133,9 @@ MicroflashOS utilises some proprietary file formats:
 
 The system disk contains two "partitions": ```mfos``` and ```userdata```
 
-- ```mfos``` contains the operating system itself. Sysmodules are stored here.
+- ```mfos``` contains the operating system itself. Core modules are stored here.
 - ```userdata``` contains, well, user data.
-  Inside each user directory (set by the generic Batch variable ```%username%```) is a directory named ```mfosdata``` that contains user-specific packages and toggles.
+  Inside each user directory (set by the generic Batch variable ```%username%```) is a directory named ```mfosdata``` that contains user-specific stuff that the system uses.
   If ```mfosdata``` is ever corrupted it will simply be regenerated on next boot. Note that some settings and packages may be missing.
 
 ---
@@ -157,7 +155,7 @@ Some noteworthy ones:
 
 ---
 
-## Reading Log Messages (as of 2026.04.01)
+## Reading Log Messages
 
 By default a file named ```mfos-log.txt``` is created in the same directory as the Batch file. 
 
