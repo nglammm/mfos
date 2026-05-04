@@ -535,15 +535,7 @@ echo Downloading latest version...
 
 curl -s -o mfos-latest.bat %batLink%
 
-echo Downloading completed, installing...
-
-call "mfos-latest.bat" :reboot
-
 echo Update completed!
-echo.
-echo Made by @nglammm
-
-call "mfos-latest.bat" :prompt
 
 goto :eof
 
