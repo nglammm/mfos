@@ -512,7 +512,7 @@ goto execdone
 
 :: auto updater
 :update
-SETLOCAL
+SETLOCAL enabledelayedexpansion
 
 :: updater links
 set batLink="https://raw.githubusercontent.com/knbn1/mfos/refs/heads/main/mfos-latest.bat"
@@ -525,6 +525,7 @@ set "return=-1"
 call :curl_check return
 if "%return%"=="" (goto :eof)
 
+echo.
 echo Checking for latest updates...
 curl -sSf -o "mfos-latest.meta" %metaLink% 2> "curl.ERR"
 
@@ -536,7 +537,7 @@ if "%return%"=="" (
     goto :eof
 )
 
-for /f "delims=" %%i in ("mfos-latest.meta") do (
+for /f "delims=" %%i in (mfos-latest.meta) do (
     set /a metaLineCount+=1
     :: can expand depending on .meta file
     if !metaLineCount! == 1 (
@@ -545,13 +546,15 @@ for /f "delims=" %%i in ("mfos-latest.meta") do (
 )
 del mfos-latest.meta
 
-call :date_GEQ %mfosver% %latestVersion% "yessir" return
+call :date_GEQ 2026.05.02 !latestVersion! "yessir" return
 if "%return%"=="yessir" (
     echo [OK] No newer versions found.
     goto :eof
 )
 
 echo [SUCCESS] Latest Version Found: %latestVersion%
+set /p cont=Are you sure you want to update?([y]/n):
+if "%cont%"=="n" (goto :eof)
 
 echo Downloading latest version...
 curl -sSf -o TEMP_mfos-latest.bat %batLink% 2> curl.ERR
@@ -566,16 +569,18 @@ if "%return%"=="" (
 
 ::Hard-coded installer - Separate in the future?
 echo @echo off > installer.bat
+echo echo. >> installer.bat
 echo echo [INFO] Installing update... >> installer.bat
 echo del mfos-latest.bat >> installer.bat
-echo ren TEMP_mfos-latest.bat mfos-latest.bat >> installer.bat
+echo move /y TEMP_mfos-latest.bat ..\..\..\..\mfos-latest.bat >> installer.bat
+echo cd ..\..\..\..\
+::PLEASE, WHY IS THE WORKING DIRECTORY HERE
+::Convert these to absolute paths
 echo mfos-latest.bat UPDATE >> installer.bat
 
-installer.bat
+installer.bat & goto :eof
 ::bye bye old version
 
-echo !! THIS SHOULD NOT BE REACHED !!
-goto :eof
 
 :: check for curl so we can do online stuffs
 :: %1=return var(bool)
@@ -596,9 +601,9 @@ goto :eof
 :: %1=filenameset(QUOTED) | %2=return var(bool)
 :file_empty
 for /f "usebackq" %%i in (%1) do (
-    set "%2=yessir" & goto :eof
+    set "%2=" & goto :eof
 )
-set "%2=" & goto :eof
+set "%2=yessir" & goto :eof
 
 :: Date format: YYYY.MM.DD (padded zeros)
 :: %1=date 1, %2=date 2, %3=use equal?(bool, QUOTED) | %4=return var(bool)
