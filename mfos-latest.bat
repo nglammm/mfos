@@ -4,6 +4,13 @@
 
 @echo off
 
+::Update cleanup
+if "%1"=="UPDATE" (
+    echo.
+    del installer.bat
+    echo [SUCCESS] Update completed!
+)
+
 :: Define some version strings
 
 set "mfosver=2026.05.04"
@@ -505,51 +512,103 @@ goto execdone
 
 :: auto updater
 :update
+SETLOCAL
 
 :: updater links
-set "batLink=https://raw.githubusercontent.com/knbn1/mfos/refs/heads/main/mfos-latest.bat"
-set "metaLink=https://raw.githubusercontent.com/knbn1/mfos/refs/heads/main/mfos-latest.meta"
+set batLink="https://raw.githubusercontent.com/knbn1/mfos/refs/heads/main/mfos-latest.bat"
+set metaLink="https://raw.githubusercontent.com/knbn1/mfos/refs/heads/main/mfos-latest.meta"
 
 set "latestVersion="
 set /a metaLineCount=0
+set "return=-1"
 
-call :curl_check
+call :curl_check return
+if "%return%"=="" (goto :eof)
 
 echo Checking for latest updates...
+curl -sSf -o "mfos-latest.meta" %metaLink% 2> "curl.ERR"
 
-for /f "delims=" %%i in ('curl -s %metaLink%') do (
+call :file_empty "curl.ERR" return
+del curl.ERR
+if "%return%"=="" (
+    ::debug option: type curl.ERR
+    echo [ERROR] Version check failed.
+    goto :eof
+)
+
+for /f "delims=" %%i in ("mfos-latest.meta") do (
     set /a metaLineCount+=1
     :: can expand depending on .meta file
     if !metaLineCount! == 1 (
         set "latestVersion=%%i"
     )
 )
+del mfos-latest.meta
 
-if "!latestVersion!"=="" (
-    echo [ERROR] No data received.
-    goto prompt
-) else (
-    echo [SUCCESS] Latest Version Found: !latestVersion!
+call :date_GEQ %mfosver% %latestVersion% "yessir" return
+if "%return%"=="yessir" (
+    echo [OK] No newer versions found.
+    goto :eof
 )
 
+echo [SUCCESS] Latest Version Found: %latestVersion%
+
 echo Downloading latest version...
+curl -sSf -o TEMP_mfos-latest.bat %batLink% 2> curl.ERR
 
-curl -s -o mfos-latest.bat %batLink%
+call :file_empty "curl.ERR" return
+del curl.ERR
+if "%return%"=="" (
+    ::Debug option: type mfos-latest.bat.ERR
+    echo [ERROR] Update download failed.
+    goto :eof
+)
 
-echo Update completed!
+::Hard-coded installer - Separate in the future?
+echo @echo off > installer.bat
+echo echo [INFO] Installing update... >> installer.bat
+echo del mfos-latest.bat >> installer.bat
+echo ren TEMP_mfos-latest.bat mfos-latest.bat >> installer.bat
+echo mfos-latest.bat UPDATE >> installer.bat
 
+installer.bat
+::bye bye old version
+
+echo !! THIS SHOULD NOT BE REACHED !!
 goto :eof
 
 :: check for curl so we can do online stuffs
+:: %1=return var(bool)
 :curl_check
 echo [INFO] Checking for curl...
 curl --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [INFO] curl not found. Installing via Winget...
-    winget install -e --id curl.curl --silent --accept-source-agreements --accept-package-agreements
-) else (
-    echo [OK] curl is already installed.
+    echo [INFO] curl not found.
+    set "%1="
+    goto :eof
+    ::Installing via Winget...
+    ::winget install -e --id curl.curl --silent --accept-source-agreements --accept-package-agreements
 )
+echo [OK] curl is already installed.
+set "%1=yessir"
+goto :eof
+
+:: %1=filenameset(QUOTED) | %2=return var(bool)
+:file_empty
+for /f "usebackq" %%i in (%1) do (
+    set "%2=yessir" & goto :eof
+)
+set "%2=" & goto :eof
+
+:: Date format: YYYY.MM.DD (padded zeros)
+:: %1=date 1, %2=date 2, %3=use equal?(bool, QUOTED) | %4=return var(bool)
+:: Derived: LSS = NOT GEQ, LEQ = NOT GTR
+:: OR swap dates to flip the inequality
+:date_GEQ
+if "%1" GTR "%2" (set "%4=yessir" & goto :eof)
+if %3=="yessir" (if "%1"=="%2" (set "%4=yessir" & goto :eof))
+
+set "%4="
 goto :eof
 
 :: About me
